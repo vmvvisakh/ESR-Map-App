@@ -47,7 +47,7 @@ export default function Sidebar({
 
   const districtsList = selectedState ? selectedState?.districts : [];
   const filteredDistricts = districtsList?.filter((district) =>
-    district?.name?.toLowerCase().includes(districtSearch?.toLowerCase()),
+    district?.name?.toLowerCase()?.includes(districtSearch?.toLowerCase()),
   );
 
   const handleStateClick = (state) => {
