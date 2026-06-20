@@ -39,7 +39,7 @@ function App() {
   };
 
   return (
-    <div style={styles.appContainer}>
+    <div className="flex flex-col min-h-screen w-screen overflow-hidden">
       {/* Top Glassmorphic Navigation Bar */}
       <Navbar 
         onOpenKeyModal={() => setIsKeyModalOpen(true)} 
@@ -47,7 +47,7 @@ function App() {
       />
 
       {/* Main App Layout */}
-      <main style={styles.mainContent}>
+      <main className="flex flex-col lg:flex-row flex-grow pt-5 gap-2.5 box-border h-[calc(100vh-90px)] lg:overflow-hidden overflow-y-auto">
         <Sidebar
           statesData={indiaData}
           selectedState={selectedState}
@@ -74,29 +74,5 @@ function App() {
     </div>
   );
 }
-
-const styles = {
-  appContainer: {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "100vh",
-    width: "100vw",
-    overflow: "hidden",
-  },
-  mainContent: {
-    display: "flex",
-    flexDirection: "row",
-    flexGrow: 1,
-    paddingTop: "20px",
-    gap: "10px",
-    boxSizing: "border-box",
-    height: "calc(100vh - 90px)",
-    "@media (max-width: 1024px)": {
-      flexDirection: "column",
-      height: "auto",
-      overflowY: "auto",
-    },
-  },
-};
 
 export default App;

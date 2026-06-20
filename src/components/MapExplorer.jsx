@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { Compass, ShieldCheck, MapPin, Loader2, Navigation, Terminal } from "lucide-react";
+import { Compass, Navigation, Terminal } from "lucide-react";
 
 // Google Maps Custom Dark Styling System
 const darkMapStyles = [
@@ -150,7 +150,7 @@ export default function MapExplorer({
   };
 
   return (
-    <div style={styles.container}>
+    <div className="grow h-[calc(100vh-110px)] relative px-5 lg:px-0 lg:pr-5 pb-5 shrink-0 box-border w-full lg:w-auto lg:h-[calc(100vh-110px)]">
       {apiKey ? (
         <LoadScript googleMapsApiKey={apiKey}>
           <GoogleMap
@@ -169,22 +169,22 @@ export default function MapExplorer({
         </LoadScript>
       ) : (
         /* Fallback Radar Visual Console */
-        <div className="dark-map-fallback" style={styles.fallbackCanvas}>
+        <div className="dark-map-fallback w-full h-full rounded-2xl border border-white/8 shadow-neon overflow-hidden relative flex flex-col items-center justify-center">
           <div className="grid-overlay" />
           
           {/* Radar Radar Tracker */}
           <div className="radar-sweep" />
 
           {/* Compass Icon */}
-          <div style={styles.targetFinder}>
-            <div style={styles.crosshairsHorizontal} />
-            <div style={styles.crosshairsVertical} />
-            <div style={styles.outerTargetCircle}>
-              <div style={styles.innerTargetCircle}>
+          <div className="relative w-40 h-40 flex items-center justify-center z-10 mb-5">
+            <div className="absolute w-[200px] h-[1px] bg-gradient-to-r from-transparent via-[#bb5f30]/40 to-transparent" />
+            <div className="absolute h-[200px] w-[1px] bg-gradient-to-b from-transparent via-[#bb5f30]/40 to-transparent" />
+            <div className="w-[120px] h-[120px] rounded-full border border-dashed border-[#bb5f30]/30 flex items-center justify-center">
+              <div className="w-[70px] h-[70px] rounded-full border border-[#bb5f30]/50 flex items-center justify-center bg-[#0a0e1a]/40 shadow-[inset_0_0_15px_rgba(187,95,48,0.1)]">
                 <Navigation 
                   size={24} 
                   style={{
-                    color: selectedState ? "var(--secondary-glow)" : "rgba(255,255,255,0.2)",
+                    color: selectedState ? "var(--color-glow-secondary)" : "rgba(255,255,255,0.2)",
                     transform: `rotate(${selectedState ? (radarLat * 15 + radarLng * 8) % 360 : 45}deg)`,
                     transition: "transform 0.8s cubic-bezier(0.19, 1, 0.22, 1)"
                   }} 
@@ -194,26 +194,26 @@ export default function MapExplorer({
           </div>
 
           {/* Coordinate Readout Drawer */}
-          <div className="glass-panel" style={styles.readoutDrawer}>
-            <div style={styles.readoutHeader}>
-              <Compass size={16} style={{ color: "var(--secondary-glow)" }} />
-              <span style={styles.readoutTitle}>GIS RADAR OVERLAY</span>
+          <div className="glass-panel p-4 px-6 absolute top-6 right-6 w-70 z-10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] bg-[#0e1224]/75 rounded-2xl">
+            <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
+              <Compass size={16} className="text-glow-secondary" />
+              <span className="text-[10px] font-bold tracking-widest text-txt-secondary">GIS RADAR OVERLAY</span>
             </div>
             
-            <div style={styles.coordRow}>
-              <div style={styles.coordBox}>
-                <span style={styles.coordLabel}>LATITUDE</span>
-                <span style={styles.coordVal}>{radarLat.toFixed(5)}° N</span>
+            <div className="flex gap-4 mb-3">
+              <div className="flex-1 flex flex-col">
+                <span className="text-[9px] text-txt-muted font-bold">LATITUDE</span>
+                <span className="text-[15px] font-extrabold text-txt-main font-mono">{radarLat.toFixed(5)}° N</span>
               </div>
-              <div style={styles.coordBox}>
-                <span style={styles.coordLabel}>LONGITUDE</span>
-                <span style={styles.coordVal}>{radarLng.toFixed(5)}° E</span>
+              <div className="flex-1 flex flex-col">
+                <span className="text-[9px] text-txt-muted font-bold">LONGITUDE</span>
+                <span className="text-[15px] font-extrabold text-txt-main font-mono">{radarLng.toFixed(5)}° E</span>
               </div>
             </div>
 
-            <div style={styles.activeLocation}>
-              <span style={styles.locLabel}>LOCK TARGET:</span>
-              <span style={styles.locVal}>
+            <div className="flex flex-col pt-2.5 border-t border-dashed border-white/5">
+              <span className="text-[9px] text-glow-secondary font-bold">LOCK TARGET:</span>
+              <span className="text-[13px] font-bold text-txt-main tracking-wide">
                 {selectedDistrict 
                   ? `${selectedDistrict.name.toUpperCase()}, ${selectedState.name.toUpperCase()}`
                   : selectedState 
@@ -224,14 +224,14 @@ export default function MapExplorer({
           </div>
 
           {/* Terminal log panel */}
-          <div className="glass-card" style={styles.terminalPanel}>
-            <div style={styles.terminalHeader}>
-              <Terminal size={14} style={{ color: "var(--primary-glow)", marginRight: "6px" }} />
+          <div className="glass-card absolute bottom-6 left-6 w-90 z-10 bg-[#060810]/80 border border-white/4 p-3 font-mono text-[11px] rounded-xl hidden md:block">
+            <div className="flex items-center text-txt-muted mb-2 border-b border-white/3 pb-1">
+              <Terminal size={14} className="text-glow-primary mr-1.5" />
               <span>gis_console_logs</span>
             </div>
-            <div style={styles.terminalBody}>
+            <div className="flex flex-col gap-1 text-success opacity-85">
               {consoleLogs.map((log, idx) => (
-                <div key={idx} style={styles.terminalLine}>
+                <div key={idx} className="overflow-hidden text-ellipsis whitespace-nowrap">
                   {log}
                 </div>
               ))}
@@ -239,11 +239,11 @@ export default function MapExplorer({
           </div>
 
           {/* Banner message suggesting Google Maps Key */}
-          <div className="glass-panel animate-fade-in" style={styles.setupBanner}>
-            <p style={styles.bannerText}>
+          <div className="glass-panel absolute bottom-6 right-6 p-3 px-4.5 flex items-center gap-3.5 z-10 bg-[#bb5f30]/8 border border-[#bb5f30]/20 max-w-[340px] rounded-xl animate-fade-in">
+            <p className="text-xs text-txt-secondary leading-relaxed">
               Official satellite layers are disabled. Input a Google Maps API Key to activate.
             </p>
-            <button onClick={onOpenKeyModal} style={styles.bannerBtn}>
+            <button onClick={onOpenKeyModal} className="py-2 px-3 bg-gradient-to-r from-glow-primary to-glow-secondary border-none rounded-md text-txt-dark font-bold text-xs cursor-pointer whitespace-nowrap shadow-[0_4px_10px_rgba(187,95,48,0.2)] hover:brightness-110 transition-all duration-200">
               Setup Key
             </button>
           </div>
@@ -252,197 +252,3 @@ export default function MapExplorer({
     </div>
   );
 }
-
-const styles = {
-  container: {
-    flexGrow: 1,
-    height: "calc(100vh - 110px)",
-    position: "relative",
-    padding: "0 20px 20px 0",
-    boxSizing: "border-box",
-    "@media (max-width: 1024px)": {
-      height: "450px",
-      width: "100%",
-      padding: "0 20px 20px 20px",
-    },
-  },
-  fallbackCanvas: {
-    width: "100%",
-    height: "100%",
-    borderRadius: "16px",
-    border: "1px solid var(--border-glow)",
-    boxShadow: "var(--shadow-neon)",
-    overflow: "hidden",
-    position: "relative",
-  },
-  targetFinder: {
-    position: "relative",
-    width: "160px",
-    height: "160px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 2,
-    marginBottom: "20px",
-  },
-  crosshairsHorizontal: {
-    position: "absolute",
-    width: "200px",
-    height: "1px",
-    background: "linear-gradient(90deg, transparent, rgba(187, 95, 48, 0.4), transparent)",
-  },
-  crosshairsVertical: {
-    position: "absolute",
-    height: "200px",
-    width: "1px",
-    background: "linear-gradient(180deg, transparent, rgba(187, 95, 48, 0.4), transparent)",
-  },
-  outerTargetCircle: {
-    width: "120px",
-    height: "120px",
-    borderRadius: "50%",
-    border: "1px dashed rgba(187, 95, 48, 0.3)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  innerTargetCircle: {
-    width: "70px",
-    height: "70px",
-    borderRadius: "50%",
-    border: "1px solid rgba(187, 95, 48, 0.5)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "rgba(10, 14, 26, 0.4)",
-    boxShadow: "inset 0 0 15px rgba(187, 95, 48, 0.1)",
-  },
-  readoutDrawer: {
-    padding: "16px 24px",
-    position: "absolute",
-    top: "24px",
-    right: "24px",
-    width: "280px",
-    zIndex: 5,
-    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-    background: "rgba(14, 18, 36, 0.75)",
-  },
-  readoutHeader: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    marginBottom: "12px",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-    paddingBottom: "8px",
-  },
-  readoutTitle: {
-    fontSize: "0.7rem",
-    fontWeight: "700",
-    letterSpacing: "0.1em",
-    color: "var(--text-secondary)",
-  },
-  coordRow: {
-    display: "flex",
-    gap: "16px",
-    marginBottom: "12px",
-  },
-  coordBox: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-  },
-  coordLabel: {
-    fontSize: "0.6rem",
-    color: "var(--text-muted)",
-    fontWeight: "600",
-  },
-  coordVal: {
-    fontSize: "0.95rem",
-    fontWeight: "700",
-    color: "var(--text-main)",
-    fontFamily: "monospace",
-  },
-  activeLocation: {
-    display: "flex",
-    flexDirection: "column",
-    paddingTop: "10px",
-    borderTop: "1px dashed rgba(255, 255, 255, 0.05)",
-  },
-  locLabel: {
-    fontSize: "0.6rem",
-    color: "var(--secondary-glow)",
-    fontWeight: "700",
-  },
-  locVal: {
-    fontSize: "0.82rem",
-    fontWeight: "700",
-    color: "var(--text-main)",
-    letterSpacing: "0.02em",
-  },
-  terminalPanel: {
-    position: "absolute",
-    bottom: "24px",
-    left: "24px",
-    width: "360px",
-    zIndex: 5,
-    background: "rgba(6, 8, 16, 0.8)",
-    border: "1px solid rgba(255, 255, 255, 0.04)",
-    padding: "12px",
-    fontFamily: "monospace",
-    fontSize: "0.75rem",
-    "@media (max-width: 768px)": {
-      display: "none",
-    },
-  },
-  terminalHeader: {
-    display: "flex",
-    alignItems: "center",
-    color: "var(--text-muted)",
-    marginBottom: "8px",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.03)",
-    paddingBottom: "4px",
-  },
-  terminalBody: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-    color: "var(--success)",
-    opacity: 0.85,
-  },
-  terminalLine: {
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-  },
-  setupBanner: {
-    position: "absolute",
-    bottom: "24px",
-    right: "24px",
-    padding: "12px 18px",
-    display: "flex",
-    alignItems: "center",
-    gap: "14px",
-    zIndex: 5,
-    background: "rgba(187, 95, 48, 0.08)",
-    border: "1px solid rgba(187, 95, 48, 0.2)",
-    maxWidth: "340px",
-  },
-  bannerText: {
-    fontSize: "0.78rem",
-    color: "var(--text-secondary)",
-    lineHeight: "1.4",
-  },
-  bannerBtn: {
-    padding: "8px 12px",
-    background: "var(--gradient-neon)",
-    border: "none",
-    borderRadius: "6px",
-    color: "var(--text-dark)",
-    fontWeight: "700",
-    fontSize: "0.75rem",
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-    boxShadow: "0 4px 10px rgba(187, 95, 48, 0.2)",
-    transition: "all 0.2s",
-  },
-};
