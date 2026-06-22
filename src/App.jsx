@@ -14,9 +14,8 @@ function App() {
 
   useEffect(() => {
     const envKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
-    const savedKey = localStorage.getItem("google_maps_api_key") || "";
 
-    setApiKey(envKey || savedKey);
+    setApiKey(envKey);
   }, []);
 
   const handleSelectState = (state) => {
